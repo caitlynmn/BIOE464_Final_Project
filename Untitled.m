@@ -1,8 +1,9 @@
 clear
 
 % Define Parameters
-Vg=0.192; % growth rate (µm/s)
-
+growthr=0.192; % growth rate (µm/s)
+dt=1;
+Lg=growthr*dt;
 % kres extremes
 kresintmin=0.175;
 kresintmax=0.175;
@@ -10,17 +11,21 @@ krespermin=0.175;
 krespermax=0.175;
 
 Nmtmax=500; % maximum number of microtubules
-Nsteps=1000; % number of steps
-Lmt=zeros(1,Nmtmax); % initialize MT lengths
-state=ones(1,Nmtmax); % initialize MT states
-start=1;
-LLmt=zeros(1,1);
-Lmtone=zeros(1,1);
-Lmtmean=zeros(1,1);
-ttime=zeros(1,1);
-Tub=zeros(1,1);
 
-[Vg state Lmt LLmt Lmtmean Lmtone ttime Tub]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lmt,LLmt, Lmtmean,Lmtone,state,Vg, ttime, Tub);
+% Initializing parameters
+Lmt=zeros(1,Nmtmax); % initialize microtubules lengths (µm)
+state=ones(1,Nmtmax); % initialize microtubules states
+LLmt=zeros(1,1); 
+Lmtone=zeros(1,1); % initilize length of one microtubule (µm)
+Lmtmean=zeros(1,1); % iniltilize average length of microtubules (µm)
+ttime=zeros(1,1); % initilize time of the simulation
+Tub=zeros(1,1); % initilize free tubulin concentration (µM)
+
+% The first and last step 
+start=1;
+Nsteps=1000; % number of steps
+
+[growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub);
 
 % RE-define parameters
 
@@ -34,7 +39,7 @@ krespermax=0.105;
 start=Nsteps+1;
 Nsteps=Nsteps*2;
 
-[Vg state Lmt LLmt Lmtmean Lmtone ttime Tub]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lmt,LLmt, Lmtmean ,Lmtone,state,Vg,ttime, Tub);
+[growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean ,Lmtone,state,growthr,ttime, Tub);
 
 figure(1)
 plot(ttime,Lmtone)

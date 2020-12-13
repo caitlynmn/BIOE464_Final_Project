@@ -1,11 +1,10 @@
-function [Vg state Lmt LLmt Lmtmean Lmtone ttime Tub]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lmt,LLmt, Lmtmean, Lmtone,state,Vg,ttime, Tub)
+function [growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean, Lmtone,state,growthr,ttime, Tub)
 TubulinTotalConc=35; % total concentration of tubulin (µM)
 Vcell=1000; % volume of the cell (µm3)
 kon=1/60; % slope (µm/s per µM)
 C1=0; % intercept (µm/s)
-TubulinTotalNumb=TubulinTotalConc*(602)*Vcell; % total # of tubulins
 dt=1;
-Lg=Vg*dt;
+TubulinTotalNumb=TubulinTotalConc*(602)*Vcell; % total # of tubulins
 knuc=0.0005; % nucleation rate (s-1)
 pnuc=1-exp(-knuc*dt); % probability of nucleation
 kcintmin=0.026;
@@ -93,6 +92,6 @@ for j=start:Nsteps
     TotalMTlength=sum(Lmt); %µm
     TubulinFreeNumb=TubulinTotalNumb-1624*TotalMTlength;
     Tub(j)=TubulinFreeNumb/(602*Vcell); % free tubulin conc (µM)
-    Vg=kon*Tub(j)+C1;
-    Lg=Vg*dt;
+    growthr=kon*Tub(j)+C1;
+    Lg=growthr*dt;
 end
