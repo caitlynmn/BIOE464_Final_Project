@@ -38,6 +38,9 @@ Nsteps=Nsteps*2;
 
 figure(1)
 plot(ttime,Lmtone)
+title("Length of one microtuble over time")
+xlabel("Time (s)");
+ylabel("Length (µm)");
 count=0;
 for i=1:Nmtmax
     if state(i)==0
@@ -48,16 +51,28 @@ for i=1:Nmtmax
 end
 count
 lengthmean=mean(length)
+
+% Distribution of simulated microtubule length
 figure(2)
 xbins=0.5:24.5; %extreme centers for equally spaced bins
 nbins=25; % number of bins
 hist(length,xbins,nbins) %plot histogram of lengths with above
 xlim([0 25])
-xlabel('length (µm)')
-ylabel('frequency (#MTs)')
-title ('MT length distribution')
+xlabel("length (µm)")
+ylabel("frequency (# of microtubules)")
+title ("Microtubule length distribution")
+
+% Average length of microtubules over time
 figure(3)
 plot(ttime,Lmtmean)
+title("Average length of microtubules over time")
+xlabel("Time (s)")
+ylabel("Average length of microtubules (µm)")
+
+% Free tubulin concentration over time
 figure(4)
 plot(ttime,Tub)
+title("Free tubulin concentration over time")
+xlabel("Time (s)")
+ylabel("Free tubulin concentration (µM)")
 ac=length';
