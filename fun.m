@@ -1,4 +1,4 @@
-function [growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean, Lmtone,state,growthr,ttime, Tub)
+function [growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg sstate]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate)
 TubulinTotalConc=35; % total concentration of tubulin (µM)
 Vcell=1000; % volume of the cell (µm3)
 kon=1/60; % slope (µm/s per µM)
@@ -43,51 +43,9 @@ for j=start:Nsteps
     % Rper select rand value b/w extremes
     Rper=Rpermin+(Rpermax-Rpermin).*rand(1,1); % periphery length (µm)
     Rint=Rcell-Rper; % cell interior length (µm)
-    for i=1:Nmtmax
-        if state(i)==0 %test for nucleation
-            if rand<pnuc
-                state(i)=1; %put into growing state if nucleated
-                Lmt(i)=Lg;
-            end
-        elseif state(i)==1 %for growing mts
-            Lmt(i)=Lmt(i)+Lg;
-            if Lmt(i)<Rint
-                if rand<pcint
-                    state(i)=2;
-                end
-            elseif Lmt(i)>Rint
-                if rand<pcper
-                    state(i)=2;
-                end
-            end
-        elseif state(i)==2
-            Lmt(i)=Lmt(i)-Ls;
-            if Lmt(i)<Rint
-                if rand<presint
-                    state(i)=1;
-                end
-            elseif Lmt(i)>Rint
-                if rand<presper
-                    state(i)=1;
-                end
-            end
-        end
-        if Lmt(i)>Rcell %check boundaries
-            Lmt(i)=Rcell;
-            state(i)=2;
-        elseif Lmt(i)<0
-            Lmt(i)=0;
-            state(i)=0;
-        end
-        LLmt(i,j)=Lmt(i);
-        sstate(i,j)=state(i);
-        Lmtmean(j)=mean(LLmt(:,j));
-        Lmtstd(j)=std(LLmt(:,j));
-        if i==1
-            Lmtone(j)=Lmt(i);
-            ttime(j)=dt*j;
-        end
-    end
+    
+    [Lmt state sstate LLmt Lmtone Lmtmean ttime]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pcper,pcint,Rint,Rcell,Ls,presint,presper);
+   
     % update free tubulin concentration
     TotalMTlength=sum(Lmt); %µm
     TubulinFreeNumb=TubulinTotalNumb-1624*TotalMTlength;
