@@ -1,6 +1,6 @@
 clear
 
-% Define Parameters
+%% Define Parameters
 growthr=0.192; % growth rate (Âµm/s)
 dt=1;
 Lg=growthr*dt;
@@ -24,9 +24,9 @@ Tub=zeros(1,1); % initilize free tubulin concentration (ÂµM)
 
 % The first and last step 
 start=1;
-Nsteps=1000; % number of steps
+Nsteps=10000; % number of steps
 
-[growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg sstate]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate);
+[state Lmt LLmt Lmtmean Lmtone ttime Tub sstate LmtCount Lmtstd]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate);
 
 % RE-define parameters
 
@@ -40,13 +40,13 @@ krespermax=0.105;
 start=Nsteps+1;
 Nsteps=Nsteps*2;
 
-[growthr state Lmt LLmt Lmtmean Lmtone ttime Tub Lg sstate]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean ,Lmtone,state,growthr,ttime, Tub, sstate);
+%[state Lmt LLmt Lmtmean Lmtone ttime Tub sstate LmtCount Lmtstd]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean ,Lmtone,state,growthr,ttime, Tub, sstate);
 
 figure(1)
 plot(ttime,Lmtone)
 title("Length of one microtuble over time")
 xlabel("Time (s)");
-ylabel("Length (Âµm)");
+ylabel("Length (µm)");
 count=0;
 for i=1:Nmtmax
     if state(i)==0
@@ -57,6 +57,7 @@ for i=1:Nmtmax
 end
 count
 lengthmean=mean(length)
+%% Plotting
 
 % Distribution of simulated microtubule length
 figure(2)
@@ -64,7 +65,7 @@ xbins=0.5:24.5; %extreme centers for equally spaced bins
 nbins=25; % number of bins
 hist(length,xbins,nbins) %plot histogram of lengths with above
 xlim([0 25])
-xlabel("length (Âµm)")
+xlabel("length (µm)")
 ylabel("frequency (# of microtubules)")
 title ("Microtubule length distribution")
 
@@ -73,12 +74,36 @@ figure(3)
 plot(ttime,Lmtmean)
 title("Average length of microtubules over time")
 xlabel("Time (s)")
-ylabel("Average length of microtubules (Âµm)")
+ylabel("Average length of microtubules (µm)")
 
-% Free tubulin concentration over time
+%Initial Microtubule Growth
 figure(4)
-plot(ttime,Tub)
-title("Free tubulin concentration over time")
+plot(ttime(1:500),Lmtone(1:500))
+title("Length of one microtubule over first 500 s")
 xlabel("Time (s)")
-ylabel("Free tubulin concentration (ÂµM)")
-ac=length';
+ylabel("Length (µm)")
+
+%Microtubule and Free Tubulin Conc. Over Time
+figure(5)
+hold on
+title('Number of microtubules and free tubulin concentration over time')
+yyaxis left
+plot(ttime,LmtCount)
+xlabel("Time (s)")
+ylabel("Number of microtubules")
+ylim([400 500])
+
+yyaxis right
+plot(ttime,Tub)
+ylabel("Free tubulin concentration (µM)")
+ylim([0 10])
+hold off
+
+%STD of MT
+figure(6)
+hold on
+title('STD of number of microtubules over time')
+plot(ttime(2:end),Lmtstd(2:end))
+xlabel("Time (s)")
+ylabel("STD of number of microtubules")
+ylim([0 10])

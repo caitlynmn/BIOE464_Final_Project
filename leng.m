@@ -1,4 +1,4 @@
-function [Lmt state sstate LLmt Lmtone Lmtmean ttime]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pcper,pcint,Rint,Rcell,Ls,presint,presper)
+function [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pcper,pcint,Rint,Rcell,Ls,presint,presper,LmtCount,Lmtstd)
 
 Nmtmax=500;
 dt=1;
@@ -40,6 +40,7 @@ for i=1:Nmtmax
         end
         LLmt(i,j)=Lmt(i);
         sstate(i,j)=state(i);
+        LmtCount(j)=sum(LLmt(:,j)~=0);
         Lmtmean(j)=mean(LLmt(:,j));
         Lmtstd(j)=std(LLmt(:,j));
         if i==1
