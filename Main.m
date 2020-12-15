@@ -1,7 +1,7 @@
 clear
 
 %% Define Parameters
-growthr=0.192; % growth rate (Âµm/s)
+growthr=0.192; % growth rate (µm/s)
 dt=1;
 Lg=growthr*dt;
 % kres extremes
@@ -13,14 +13,14 @@ krespermax=0.175;
 Nmtmax=500; % maximum number of microtubules
 
 % Initializing parameters
-Lmt=zeros(1,Nmtmax); % initialize microtubules lengths (Âµm)
+Lmt=zeros(1,Nmtmax); % initialize microtubules lengths (µm)
 state=ones(1,Nmtmax); % initialize microtubules states
 LLmt=zeros(1,1); 
-Lmtone=zeros(1,1); % initilize length of one microtubule (Âµm)
-Lmtmean=zeros(1,1); % iniltilize average length of microtubules (Âµm)
+Lmtone=zeros(1,1); % initilize length of one microtubule (µm)
+Lmtmean=zeros(1,1); % iniltilize average length of microtubules (µm)
 sstate=zeros(1,1);
 ttime=zeros(1,1); % initilize time of the simulation
-Tub=zeros(1,1); % initilize free tubulin concentration (ÂµM)
+Tub=zeros(1,1); % initilize free tubulin concentration (µM)
 
 % The first and last step 
 start=1;
