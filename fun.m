@@ -1,4 +1,4 @@
-function [state Lmt LLmt Lmtmean Lmtone ttime Tub sstate LmtCount Lmtstd]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate)
+function [state Lmt LLmt Lmtmean Lmtone ttime Tub sstate LmtCount Lmtstd]=fun(start, Nsteps,krespermin,krespermax,kresintmin,kresintmax,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate, kcintmin, kcintmax, kcpermin, kcpermax, Vsmin, Vsmax)
 TubulinTotalConc=35; % total concentration of tubulin (µM)
 Vcell=1000; % volume of the cell (µm^3)
 kon=1/60; % slope (µm/s per µM)
@@ -7,10 +7,6 @@ dt=1;
 TubulinTotalNumb=TubulinTotalConc*(602)*Vcell; % total # of tubulins
 knuc=0.0005; % nucleation rate (s-1)
 pnuc=1-exp(-knuc*dt); % probability of nucleation
-kcintmin=0.026;
-kcintmax=0.026;
-kcpermin=0.026;
-kcpermax=0.026;
 % cell radius extremes
 Rcellmin=25; % cell radius minimum (µm)
 Rcellmax=25; % cell radius maximum (µm)
@@ -18,9 +14,6 @@ Rcellmax=25; % cell radius maximum (µm)
 Rpermin=10; % periphery length minimum (µm)
 Rpermax=10; % periphery length maximum (µm)
 Nmtmax=500; % maximum number of microtubules
-% Vs extremes
-Vsmin=0.218;
-Vsmax=0.218;
 LmtCount = 0;
 Lmtstd = 0;
 for j=start:Nsteps
