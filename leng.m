@@ -1,4 +1,4 @@
-function [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pcper,pcint,Rint,Rcell,Ls,presint,presper,LmtCount,Lmtstd)
+function [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pc,Rint,Rcell,Ls,pr,LmtCount,Lmtstd)
 
 Nmtmax=500;
 dt=1;
@@ -8,25 +8,25 @@ for i=1:Nmtmax
                 state(i)=1; %put into growing state if nucleated
                 Lmt(i)=Lg;
             end
-        elseif state(i)==1 %for growing mts
+        elseif state(i)==1 % if growing state
             Lmt(i)=Lmt(i)+Lg;
             if Lmt(i)<Rint
-                if rand<pcint
+                if rand<pc
                     state(i)=2;
                 end
             elseif Lmt(i)>Rint
-                if rand<pcper
+                if rand<pc
                     state(i)=2;
                 end
             end
-        elseif state(i)==2
+        elseif state(i)==2 %if catastrophe state
             Lmt(i)=Lmt(i)-Ls;
             if Lmt(i)<Rint
-                if rand<presint
+                if rand<pr 
                     state(i)=1;
                 end
             elseif Lmt(i)>Rint
-                if rand<presper
+                if rand<pr
                     state(i)=1;
                 end
             end

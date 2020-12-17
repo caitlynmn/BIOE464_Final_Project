@@ -18,19 +18,18 @@ Rper=10; % periphery length minimum (µm)
 Nmtmax=500; % maximum number of microtubules
 LmtCount = 0;
 Lmtstd = 0;
+pc=1-exp(-Kc*dt); % probability of catastrophe in cell
+pr=1-exp(-Kr*dt); % probability of rescue in cell
+Rint=Rcell-Rper; % cell interior length (µm)
+
+
 for j=start:Nsteps
     
     Ls=Vs*dt; % length lost in one step (µm)
     % update kcat & kres
     % select rand values b/w extremes
     
-    pc=1-exp(-Kc*dt); % probability of catastrophe in cell
-    
-    pr=1-exp(-Kr*dt); % probability of rescue in cell
-    
-    Rint=Rcell-Rper; % cell interior length (µm)
-    
-    [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pc,pc,Rint,Rcell,Ls,pr,pr, LmtCount,Lmtstd);
+    [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pc,Rint,Rcell,Ls,pr, LmtCount,Lmtstd);
    
     % update free tubulin concentration
     TotalMTlength=sum(Lmt); %µm
