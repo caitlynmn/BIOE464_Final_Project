@@ -1,40 +1,36 @@
-function [state Lmt LLmt Lmtmean Lmtone ttime Tub sstate LmtCount Lmtstd]=fun(start, Nsteps,Lg,Lmt,LLmt, Lmtmean,Lmtone,state,growthr, ttime, Tub, sstate, Vs, Kc, Kr);
+function [MT_State MT_Length LLmt Avg_MT_Length One_MT_Length Sim_Time Tubulin sstate MT_Count MT_Std]=fun(initial,N,growth_length,MT_Length,LLmt,Avg_MT_Length,One_MT_Length,MT_State,V_g,Sim_Time,Tubulin,sstate,V_s,k_c,k_r);
 
-TubulinTotalConc=35; % total concentration of tubulin (µM)
-Vcell=1000; % volume of the cell (µm^3)
-kon=1/60; % slope (µm/s per µM)
-C1=0; % intercept (µm/s)
-dt=1;
-TubulinTotalNumb=TubulinTotalConc*(602)*Vcell; % total # of tubulins
-knuc=0.0005; % nucleation rate (s-1)
-pnuc=1-exp(-knuc*dt); % probability of nucleation
+Tot_Tub_Conc = 35; % total tubulin concentration (µM)
+Vcell = 1000; % volume of the cell (µm^3)
+Tot_Tub_Num = Tot_Tub_Conc*(602)*Vcell; % total # of tubulins
 
-% cell radius extremes
-Rcell=25; % cell radius minimum (µm)
+kon = 1/60; % slope (µm/s per µM)
+C = 0; % intercept (µm/s)
+dt = 1; % time step (s)
+k_nuc = 0.0005; % nucleation rate (s-1)
 
-% peripheral zone extremes
-Rper=10; % periphery length minimum (µm)
+prob_nuc = 1-exp(-k_nuc*dt); % probability of MT nucleation
+prob_c = 1-exp(-k_c*dt); % probability of MT catastrophe
+prob_r = 1-exp(-k_r*dt); % probability of MT rescue
 
-Nmtmax=500; % maximum number of microtubules
-LmtCount = 0;
-Lmtstd = 0;
-pc=1-exp(-Kc*dt); % probability of catastrophe in cell
-pr=1-exp(-Kr*dt); % probability of rescue in cell
-Rint=Rcell-Rper; % cell interior length (µm)
+Cell_Radius = 25; % cell radius (µm)
+R_periph = 10; % peripheral zone length minimum (µm)
+R_interior = Cell_Radius - R_periph; % cell interior length (µm)
 
+MAX_NMT = 500; % maximum number of microtubules
+MT_Count = 0;
+MT_Std = 0;
 
-for j=start:Nsteps
+short_length = V_s*dt; % length lost in one step (µm)
+
+for j=initial:N
     
-    Ls=Vs*dt; % length lost in one step (µm)
-    % update kcat & kres
-    % select rand values b/w extremes
-    
-    [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pc,Rint,Rcell,Ls,pr, LmtCount,Lmtstd);
+    [MT_Length MT_State sstate LLmt One_MT_Length Avg_MT_Length Sim_Time MT_Count MT_Std]= leng(j,prob_nuc,MT_State,growth_length,MT_Length,LLmt,One_MT_Length,Avg_MT_Length,sstate,Sim_Time,prob_c,R_interior,Cell_Radius,short_length,prob_r,MT_Count,MT_Std);
    
-    % update free tubulin concentration
-    TotalMTlength=sum(Lmt); %µm
-    TubulinFreeNumb=TubulinTotalNumb-1624*TotalMTlength;
-    Tub(j)=TubulinFreeNumb/(602*Vcell); % free tubulin conc (µM)
-    growthr=kon*Tub(j)+C1;
-    Lg=growthr*dt;
+    % Calculate new free tubulin concentration
+    Sum_MT_Length = sum(MT_Length); % find total MT length in µm
+    Numb_Free_Tub = Tot_Tub_Num - 1624*Sum_MT_Length; % find number of free tubulin
+    Tubulin(j) = Numb_Free_Tub/(602*Vcell); % free tubulin conc (µM)
+    V_g = kon*Tubulin(j)+C; % find new growth rate (µm/s)
+    growth_length = V_g*dt; % find new growth length (µm)
 end
