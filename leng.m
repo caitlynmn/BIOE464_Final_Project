@@ -1,51 +1,51 @@
-function [Lmt state sstate LLmt Lmtone Lmtmean ttime LmtCount Lmtstd]= leng(j,pnuc,state, Lg, Lmt, LLmt, Lmtone, Lmtmean, sstate, ttime, pc,Rint,Rcell,Ls,pr,LmtCount,Lmtstd)
+function [MT_Length MT_State sstate LLmt One_MT_Length Avg_MT_Length Sim_Time MT_Count MT_Std]= leng(j,prob_nuc,MT_State, growth_length, MT_Length, LLmt, One_MT_Length, Avg_MT_Length, sstate, Sim_Time, prob_c,R_interior,Cell_Radius,short_length,prob_r,MT_Count,MT_Std)
 
 Nmtmax=500;
 dt=1;
 for i=1:Nmtmax
-        if state(i)==0 %test for nucleation
-            if rand<pnuc
-                state(i)=1; %put into growing state if nucleated
-                Lmt(i)=Lg;
+        if MT_State(i)==0 %test for nucleation
+            if rand<prob_nuc
+                MT_State(i)=1; %put into growing state if nucleated
+                MT_Length(i)=growth_length;
             end
-        elseif state(i)==1 % if growing state
-            Lmt(i)=Lmt(i)+Lg;
-            if Lmt(i)<Rint
-                if rand<pc
-                    state(i)=2;
+        elseif MT_State(i)==1 % if growing state
+            MT_Length(i)=MT_Length(i)+growth_length;
+            if MT_Length(i)<R_interior
+                if rand<prob_c
+                    MT_State(i)=2;
                 end
-            elseif Lmt(i)>Rint
-                if rand<pc
-                    state(i)=2;
+            elseif MT_Length(i)>R_interior
+                if rand<prob_c
+                    MT_State(i)=2;
                 end
             end
-        elseif state(i)==2 %if catastrophe state
-            Lmt(i)=Lmt(i)-Ls;
-            if Lmt(i)<Rint
-                if rand<pr 
-                    state(i)=1;
+        elseif MT_State(i)==2 %if catastrophe state
+            MT_Length(i)=MT_Length(i)-short_length;
+            if MT_Length(i)<R_interior
+                if rand<prob_r 
+                    MT_State(i)=1;
                 end
-            elseif Lmt(i)>Rint
-                if rand<pr
-                    state(i)=1;
+            elseif MT_Length(i)>R_interior
+                if rand<prob_r
+                    MT_State(i)=1;
                 end
             end
         end
-        if Lmt(i)>Rcell %check boundaries
-            Lmt(i)=Rcell;
-            state(i)=2;
-        elseif Lmt(i)<0
-            Lmt(i)=0;
-            state(i)=0;
+        if MT_Length(i)>Cell_Radius %check boundaries
+            MT_Length(i)=Cell_Radius;
+            MT_State(i)=2;
+        elseif MT_Length(i)<0
+            MT_Length(i)=0;
+            MT_State(i)=0;
         end
-        LLmt(i,j)=Lmt(i);
-        sstate(i,j)=state(i);
-        LmtCount(j)=sum(LLmt(:,j)~=0);
-        Lmtmean(j)=mean(LLmt(:,j));
-        Lmtstd(j)=std(LLmt(:,j));
+        LLmt(i,j)=MT_Length(i);
+        sstate(i,j)=MT_State(i);
+        MT_Count(j)=sum(LLmt(:,j)~=0);
+        Avg_MT_Length(j)=mean(LLmt(:,j));
+        MT_Std(j)=std(LLmt(:,j));
         if i==1
-            Lmtone(j)=Lmt(i);
-            ttime(j)=dt*j;
+            One_MT_Length(j)=MT_Length(i);
+            Sim_Time(j)=dt*j;
         end
 end
 end

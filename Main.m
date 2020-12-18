@@ -57,7 +57,7 @@ N2 = 1200 + N; % number of steps
 counter = 0; % create empty counter for no. of MT
 
 for i=1:Max_NMT
-    if MT_State(i)!=0 % does not count for empty nucleation sites
+    if MT_State(i)~=0 % does not count for empty nucleation sites
         counter = counter + 1; % adds to MT counter if nucleated site
         All_Lengths(counter) = MT_Length(i); % adds MT length to all lengths array
     end
