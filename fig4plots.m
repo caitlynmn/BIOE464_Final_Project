@@ -1,4 +1,14 @@
+%% Plotting for Figure 1
+
+% The following plots are used for Figure 4. All other figures were plotted
+% using other scripts found in the GitHub folder: https://github.com/caitlynmn/BIOE464_Final_Project
+
+% Simulations were run, and resulting Numb_MT, Tubulin, and Avg_MT_Length
+% variables were changed to XCount, XTub, and XLen, respectively, with X
+% being the name of the variable being changed, or just SetA if it is the
+% control group
 %% Plotting A
+
 figure(1)
 plot([0:1200-1],SetACount(10001:end))
 hold on

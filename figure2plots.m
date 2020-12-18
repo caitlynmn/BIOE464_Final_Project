@@ -1,3 +1,8 @@
+%% Plotting for Figure 2
+
+% The following plots are used for Figure 2. All other figures were plotted
+% using other scripts found in the GitHub folder: https://github.com/caitlynmn/BIOE464_Final_Project
+
 mtcount = [359 428 478 499; 238 290 357 416];
 freetb = [2.4290 2.5515 2.9842 4.2817; 9.1001 10.3328 11.0617 11.9721];
 avglen = [18.1432 19.4425 20.9508 22.8196; 16.9768 18.7481 19.6645 20.5197];

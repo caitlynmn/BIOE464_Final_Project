@@ -1,4 +1,7 @@
-close all
+%% Plotting for Figure 3
+
+% The following plots are used for Figure 3. All other figures were plotted
+% using other scripts found in the GitHub folder: https://github.com/caitlynmn/BIOE464_Final_Project
 
 MT = [496 498 480 442;409 380 476 492];
 TB = [4.7036 3.9583 6.8392 9.9701; 12.5837 14.4628 7.822 5.5995];
